@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1049446572718",
+    "project_id": "salting-1635517386719",
+    "storage_bucket": "salting-1635517386719.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049446572718:android:113e73992950b61593c33f",
+        "android_client_info": {
+          "package_name": "com.example.salting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049446572718-1b1d188iu6ekngro021qb6h4h38688rf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhOAytuQOXIlw4gawCg4_vz-n4YsvD6zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049446572718-1b1d188iu6ekngro021qb6h4h38688rf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
