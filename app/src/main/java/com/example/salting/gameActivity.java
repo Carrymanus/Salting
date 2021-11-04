@@ -236,10 +236,8 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
         Intent intent = new Intent(getApplicationContext(),profileActivity.class);
         intent.putExtra("email",signInAccount.getEmail());
         intent.putExtra("friends",friends);
-        System.out.println("EZ ITTEN A SHAKE: "+shakeCount);
         intent.putExtra("shakeCount",shakeCount);
         intent.putExtra("regDate",regDate);
-        System.out.println("EZ A PHOTO LINK: "+signInAccount.getPhotoUrl());
         intent.putExtra("pic",signInAccount.getPhotoUrl().toString());
         startActivity(intent);
     }
