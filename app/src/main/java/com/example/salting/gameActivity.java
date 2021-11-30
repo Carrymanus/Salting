@@ -68,16 +68,11 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
         super.onStart();
 
         //progress betöltése:
-        System.out.println("SZIGNIOSADASD: "+ signInAccount.getEmail());
-        System.out.println("ALMAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         userDAOfb userDAOfb = new userDAOfb();
-        System.out.println("BARAAAAAAAAAAACK");
         userDAOfb.getAll(new RetrievalEventListener<List<userClass>>() {
             @Override
             public void OnDataRetrieved(List<userClass> userClasses) {
-                System.out.println("ITTVAGYOKDEHOLVAGYOK");
                 if (userClasses.isEmpty()){
-                    System.out.println("WAZAAAASDADSADSADASD");
                     userClass usernew = new userClass();
                     userDAOfb userDAOfb = new userDAOfb();
                     usernew.email = signInAccount.getEmail();
