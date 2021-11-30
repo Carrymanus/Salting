@@ -12,7 +12,7 @@
 - Stores the number of shakes in a database
 - Can add friends 😎 to see their shakes
   - Lists them in a leaderboard 🏆
-  - Can remove them aswell 🥲
+  - Can remove them aswell
 ##
 
 <table>
