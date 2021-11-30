@@ -204,30 +204,12 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
                 if (acceleration > SHAKE_THRESHOLD) {
                     mLastShakeTime = curTime;
                     shakeCount++;
-                    ValueAnimator animator = ValueAnimator.ofFloat((float)50,(float)60);
-                    animator.setDuration(600);
-
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            float animatedValue = (float) valueAnimator.getAnimatedValue();
-                            shakeCounterTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,animatedValue);
-                        }
-                    });
-                    animator.start();
-                    Animation   shake;
+                    Animation shake,scale;
                     shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
+                    scale = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);
                     salterImageView.startAnimation(shake);
+                    shakeCounterTextView.startAnimation(scale);
                     shakeCounterTextView.setText(""+shakeCount);
-                    animator = ValueAnimator.ofFloat(60,50);
-                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        @Override
-                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            float animatedValue = (float) valueAnimator.getAnimatedValue();
-                            shakeCounterTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,animatedValue);
-                        }
-                    });
-                    animator.start();
                 }
             }
         }
