@@ -21,9 +21,14 @@ public class userClass {
         name = "";
         email = "";
         friends = "";
-        shakeCount = -1;
+        shakeCount = 0;
         profPic = "";
         regDate = "";
+    }
+
+    @Override
+    public String toString() {
+        return ""+name +" "+email + " " + friends+" "+ shakeCount + " " +profPic + " " +regDate;
     }
 
     public String getName() { return name; }
