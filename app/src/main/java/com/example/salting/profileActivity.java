@@ -37,6 +37,8 @@ public class profileActivity extends AppCompatActivity {
     TextView profileRegDateTextView,profileShakeCountTextView,profileEmailTextView;
     ImageView profileProfPicImageView;
 
+    String friends,email;
+
     Button returnButton,addFriendButton;
 
     RecyclerView recyclerView;
@@ -47,6 +49,37 @@ public class profileActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private EditText newFriendName;
     private Button newFriendAdd,newFriendAddCancel;
+
+//    public void removeFriend(String name){
+//        friends = friends.replace(name+",","");
+//        DAOuser daOuser = new DAOuser();
+//        HashMap<String, Object> hashMap = new HashMap<>();
+//        hashMap.put("friends",friends);
+//        FirebaseDatabase db = FirebaseDatabase.getInstance("https://salting-1635517386719-default-rtdb.europe-west1.firebasedatabase.app");
+//        DatabaseReference databaseReference = db.getReference(userClass.class.getSimpleName());
+//        databaseReference
+//                .orderByChild("email")
+//                .equalTo(email)
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                            String key = childSnapshot.getKey();
+//                            daOuser.update(key, hashMap).addOnSuccessListener(suc ->
+//                            {
+//                                Toast.makeText(profileActivity.this, "Friend succesfully added!", Toast.LENGTH_SHORT).show();
+//                            }).addOnFailureListener(fail ->
+//                            {
+//                                Toast.makeText(profileActivity.this, "" + fail.getMessage(), Toast.LENGTH_SHORT).show();
+//                            });
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                    }
+//                });
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +94,8 @@ public class profileActivity extends AppCompatActivity {
         addFriendButton = findViewById(R.id.addFriendButton);
 
         Intent intent = getIntent();
-        String email = intent.getStringExtra("email");
-        String friends = intent.getStringExtra("friends");
+        email = intent.getStringExtra("email");
+        friends = intent.getStringExtra("friends");
         String[] friendArray = friends.split(" ");
         int shakeCount = intent.getIntExtra("shakeCount",0);
         String regDate = intent.getStringExtra("regDate");
@@ -71,8 +104,9 @@ public class profileActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent2 = new Intent(getApplicationContext(),gameActivity.class);
-                startActivity(intent2);
+//                Intent intent2 = new Intent(getApplicationContext(),gameActivity.class);
+//                startActivity(intent2);
+                  finish();
             }
         });
 
@@ -94,7 +128,8 @@ public class profileActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         DAOuser daOuser = new DAOuser();
                         HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("friends",friends.concat(" "+newFriendName.getText()));
+                        friends = friends.concat(" "+newFriendName.getText());
+                        hashMap.put("friends",friends);
                         FirebaseDatabase db = FirebaseDatabase.getInstance("https://salting-1635517386719-default-rtdb.europe-west1.firebasedatabase.app");
                         DatabaseReference databaseReference = db.getReference(userClass.class.getSimpleName());
                         databaseReference
@@ -153,7 +188,7 @@ public class profileActivity extends AppCompatActivity {
             }
         });
 
-        Glide.with(this).load(photoUrl).override(90,80).into(profileProfPicImageView);
+        Glide.with(this).load(photoUrl).override(90,80).centerCrop().into(profileProfPicImageView);
         profileShakeCountTextView.setText(""+shakeCount);
         profileEmailTextView.setText(email.split("@")[0]);
         profileRegDateTextView.setText(regDate);

@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/kodok/android/Salting/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5703125" />
+        <entry key="..\:/kodok/android/Salting/app/src/main/res/drawable/blackborder.xml" value="0.5703125" />
         <entry key="..\:/kodok/android/Salting/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5703125" />
+        <entry key="..\:/kodok/android/Salting/app/src/main/res/drawable/shake.xml" value="0.4109375" />
+        <entry key="..\:/kodok/android/Salting/app/src/main/res/font/coming_soon.xml" value="0.425" />
         <entry key="..\:/kodok/android/Salting/app/src/main/res/layout/activity_game.xml" value="0.33" />
         <entry key="..\:/kodok/android/Salting/app/src/main/res/layout/activity_main.xml" value="0.5401041666666667" />
         <entry key="..\:/kodok/android/Salting/app/src/main/res/layout/activity_profile.xml" value="0.39479166666666665" />

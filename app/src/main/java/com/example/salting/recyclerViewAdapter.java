@@ -46,6 +46,14 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
         holder.friendRegDateTextView.setText(user.regDate);
         holder.friendShakeCountTextView.setText(""+user.shakeCount);
         Glide.with(context).load(user.getProfPic()).override(90,80).into(holder.friendPicImageView);
+//        holder.removeFriendImageView.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//
+//                    }
+//                }
+//        );
     }
 
     @Override
@@ -56,7 +64,7 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView friendNameTextView,friendShakeCountTextView,friendRegDateTextView,friendSpotTextView;
-        ImageView friendPicImageView;
+        ImageView friendPicImageView,removeFriendImageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,6 +74,8 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
             friendShakeCountTextView = itemView.findViewById(R.id.friendShakeCountTextView);
             friendRegDateTextView = itemView.findViewById(R.id.friendRegDateTextView);
             friendPicImageView = itemView.findViewById(R.id.friendPicImageView);
+            removeFriendImageView = itemView.findViewById(R.id.removeFriendImageView);
+
 
         }
     }{

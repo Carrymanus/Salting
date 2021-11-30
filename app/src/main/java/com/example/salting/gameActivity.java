@@ -1,12 +1,16 @@
 package com.example.salting;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +26,7 @@ import com.example.firbasedao.Listeners.RetrievalEventListener;
 import com.example.firbasedao.Listeners.TaskListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.SignInAccount;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +43,7 @@ import java.util.List;
 public class gameActivity extends AppCompatActivity implements SensorEventListener{
 
     TextView emailTextView;
-    ImageView photoImageView;
+    ImageView photoImageView,salterImageView;
     Button signOutButton;
     Button saveButton;
 
@@ -54,15 +59,25 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
     private String regDate = "";
 
     @Override
+    protected void onResume(){
+        super.onResume();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
         //progress betöltése:
+        System.out.println("SZIGNIOSADASD: "+ signInAccount.getEmail());
+        System.out.println("ALMAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         userDAOfb userDAOfb = new userDAOfb();
+        System.out.println("BARAAAAAAAAAAACK");
         userDAOfb.getAll(new RetrievalEventListener<List<userClass>>() {
             @Override
             public void OnDataRetrieved(List<userClass> userClasses) {
+                System.out.println("ITTVAGYOKDEHOLVAGYOK");
                 if (userClasses.isEmpty()){
+                    System.out.println("WAZAAAASDADSADSADASD");
                     userClass usernew = new userClass();
                     userDAOfb userDAOfb = new userDAOfb();
                     usernew.email = signInAccount.getEmail();
@@ -86,36 +101,39 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
                         }
                     });
                 }
+                boolean useralreadyexists = false;
                 for (userClass user : userClasses){
                     if (user.email.equals(signInAccount.getEmail())){
-                        shakeCount = user.shakeCount;
-                        if(shakeCount == -1){
-                            userClass usernew = new userClass();
-                            userDAOfb userDAOfb = new userDAOfb();
-                            usernew.email = signInAccount.getEmail();
-                            usernew.name = signInAccount.getEmail().split("@")[0];
-                            usernew.friends = "";
-                            usernew.shakeCount = 0;
-                            usernew.profPic = signInAccount.getPhotoUrl().toString();
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                            Date date = new Date();
-                            usernew.regDate = dateFormat.format(date);
-                            userDAOfb.save(usernew, userDAOfb.GetNewKey(), new TaskListener() {
-                                @Override
-                                public void OnSuccess() {
-                                    Toast.makeText(getApplicationContext(), "Welcome to the game!", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void OnFail() {
-                                    Toast.makeText(getApplicationContext(), "Failed to save!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
+                        useralreadyexists = true;
                         friends = user.friends;
+                        shakeCount = user.shakeCount;
                         regDate = user.regDate;
-                        shakeCounterTextView.setText("Shake count: " + shakeCount);
+                        shakeCounterTextView.setText(""+shakeCount);
                     }
+                }
+                if(!useralreadyexists){
+                    userClass usernew = new userClass();
+                    userDAOfb userDAOfb = new userDAOfb();
+                    usernew.email = signInAccount.getEmail();
+                    usernew.name = signInAccount.getEmail().split("@")[0];
+                    usernew.friends = "";
+                    usernew.shakeCount = 0;
+                    usernew.profPic = signInAccount.getPhotoUrl().toString();
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    Date date = new Date();
+                    usernew.regDate = dateFormat.format(date);
+                    System.out.println("ÚJ ACC: "+usernew.email + " "+ usernew.name + " "+usernew.friends+" "+usernew.shakeCount+" "+usernew.profPic);
+                    userDAOfb.save(usernew, userDAOfb.GetNewKey(), new TaskListener() {
+                        @Override
+                        public void OnSuccess() {
+                            Toast.makeText(getApplicationContext(), "Welcome to the game!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void OnFail() {
+                            Toast.makeText(getApplicationContext(), "Failed to save!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
@@ -130,10 +148,11 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
         photoImageView = findViewById(R.id.photoImageView);
         signOutButton = findViewById(R.id.signOutButton);
         saveButton = findViewById(R.id.saveButton);
+        salterImageView = findViewById(R.id.salterImageView);
         signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if(signInAccount!=null){
             emailTextView.setText(signInAccount.getEmail().split("@")[0]);
-            Glide.with(this).load(String.valueOf(signInAccount.getPhotoUrl())).override(50,45).into(photoImageView);
+            Glide.with(this).load(String.valueOf(signInAccount.getPhotoUrl())).override(50,45).centerCrop().into(photoImageView);
         }
 
         shakeCounterTextView = findViewById(R.id.shakeCounterTextView);
@@ -168,6 +187,15 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
+    public void onBackPressed(){
+        saveShakeToDb();
+        Intent exit = new Intent(Intent.ACTION_MAIN);
+        exit.addCategory(Intent.CATEGORY_HOME);
+        exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(exit);
+    }
+
+    @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             long curTime = System.currentTimeMillis();
@@ -178,12 +206,33 @@ public class gameActivity extends AppCompatActivity implements SensorEventListen
                 double acceleration = Math.sqrt(Math.pow(x, 2) +
                         Math.pow(y, 2) +
                         Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH;
-                //Log.d("Salting: ", "Acceleration is " + acceleration + "m/s^2");
                 if (acceleration > SHAKE_THRESHOLD) {
                     mLastShakeTime = curTime;
                     shakeCount++;
-                    shakeCounterTextView.setText("Shake count: " + shakeCount);
-                    //Log.d("Salting: ", "Shake, Rattle, and Roll");
+                    ValueAnimator animator = ValueAnimator.ofFloat((float)50,(float)60);
+                    animator.setDuration(600);
+
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            float animatedValue = (float) valueAnimator.getAnimatedValue();
+                            shakeCounterTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,animatedValue);
+                        }
+                    });
+                    animator.start();
+                    Animation   shake;
+                    shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
+                    salterImageView.startAnimation(shake);
+                    shakeCounterTextView.setText(""+shakeCount);
+                    animator = ValueAnimator.ofFloat(60,50);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            float animatedValue = (float) valueAnimator.getAnimatedValue();
+                            shakeCounterTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP,animatedValue);
+                        }
+                    });
+                    animator.start();
                 }
             }
         }
